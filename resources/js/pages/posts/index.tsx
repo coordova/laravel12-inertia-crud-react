@@ -13,16 +13,20 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function index() {
     // get posts from props, usePage is a hook that returns the current page props, props are passed from the server to the client
     const { posts } = usePage<{ posts: Post[] }>().props;
+
     // useForm is a hook that returns the current form state, it is used to handle form submissions
-    const { post, reset } = useForm();
-    // destroy is a function that is used to delete a post, it is used in the delete button
-    const destroy = (id: number) => {
-        // post is a function that is used to make a post request, it is used to delete a post
-        post(route('posts.destroy', id), {
-            // onFinish is a function that is used to handle the response from the server, it is used to reset the form
+    const { delete: destroy, reset } = useForm();
+
+    const destroyPost = (e: any, post: Post) => {
+        e.preventDefault();
+        if (!window.confirm('Are you sure you want to delete this post?')) {
+            return;
+        }
+        destroy(route('posts.destroy', post), {
             onFinish: () => reset(),
         });
     };
+
     return (
         <Layout breadcrumbs={breadcrumbs}>
             <Head title="Posts" />
@@ -32,7 +36,7 @@ export default function index() {
                 <div>
                     <Link
                         href={route('posts.create')}
-                        className="rounded-lg bg-green-700 px-3 py-2 text-xs font-medium text-white hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                        className="rounded-sm bg-green-700 px-3 py-2 text-xs font-medium text-white hover:bg-green-800 focus:ring-4 focus:ring-green-300 focus:outline-none dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                     >
                         Create Post
                     </Link>
@@ -65,18 +69,20 @@ export default function index() {
                                     <td className="px-6 py-2 text-zinc-600 dark:text-zinc-300">{post.title}</td>
                                     <td className="px-6 py-2 text-zinc-600 dark:text-zinc-300">{post.body}</td>
                                     <td className="px-6 py-2">
-                                        <Link
-                                            href={route('posts.edit', post.id)}
-                                            className="rounded-lg bg-blue-700 px-3 py-2 text-xs font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                        >
-                                            Edit
-                                        </Link>
-                                        <button
-                                            onClick={() => destroy(post.id)}
-                                            className="ml-1 rounded-lg bg-red-700 px-3 py-2 text-xs font-medium text-white hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                                        >
-                                            Delete
-                                        </button>
+                                        <form onSubmit={(e: any) => destroyPost(e, post)}>
+                                            <Link
+                                                href={route('posts.edit', post.id)}
+                                                className="rounded-sm bg-blue-700 px-3 py-2 text-xs font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                            >
+                                                Edit
+                                            </Link>
+                                            <button
+                                                type="submit"
+                                                className="ml-1 rounded-sm bg-red-700 px-3 py-2 text-xs font-medium text-white hover:bg-red-800 focus:ring-4 focus:ring-red-300 focus:outline-none dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                                            >
+                                                Delete
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             ))}
