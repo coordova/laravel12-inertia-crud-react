@@ -1,6 +1,7 @@
 import Layout from '@/layouts/app-layout';
-import { BreadcrumbItem, Post } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { BreadcrumbItem } from '@/types';
+import { Post } from '@/types/custom.d';
+import { Head, Link, usePage } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -8,7 +9,9 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/posts',
     },
 ];
-export default function index({ posts }: { posts: Post[] }) {
+// export default function index({ posts }: { posts: Post[] }) {
+export default function index() {
+    const { posts } = usePage<{ posts: Post[] }>().props;
     return (
         <Layout breadcrumbs={breadcrumbs}>
             <Head title="Posts" />

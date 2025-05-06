@@ -50,7 +50,7 @@ const Create = () => {
                             className="mt-1 block w-full"
                             value={data.title}
                             onChange={(e) => setData('title', e.target.value)}
-                            required
+                            // required
                             autoComplete="title"
                             placeholder="Title"
                         />
@@ -65,7 +65,7 @@ const Create = () => {
                             className="border-input file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex h-15 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
                             value={data.body}
                             onChange={(e: any) => setData('body', e.target.value)}
-                            required
+                            // required
                             autoComplete="body"
                             placeholder="Body"
                         />

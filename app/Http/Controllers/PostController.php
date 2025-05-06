@@ -14,7 +14,7 @@ class PostController extends Controller
     public function index()
     {
         return Inertia::render('posts/index', [
-            'posts' => Post::all(),
+            'posts' => Post::latest()->get(),
         ]);
     }
 
@@ -31,7 +31,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        Post::create($request->all());
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+        ]);
+        Post::create([
+            'title' => $request->title,
+            'body' => $request->body,
+        ]);
         return redirect()->route('posts.index');
     }
 
